@@ -10,12 +10,14 @@ import re
 import shlex
 import shutil
 import signal
+import ssl
 import subprocess
 import sys
 import tarfile
 import tempfile
 import time
 from urllib.parse import unquote, urljoin, urlsplit
+from urllib.error import HTTPError, URLError
 from urllib.request import build_opener, HTTPRedirectHandler, Request
 import uuid
 
@@ -173,28 +175,85 @@ class LimitedRedirects(HTTPRedirectHandler):
         # SITE_URL must be the canonical origin; never follow a login/foreign host.
         before, after = urlsplit(req.full_url), urlsplit(newurl)
         if (before.scheme, before.netloc) != (after.scheme, after.netloc):
-            raise ValueError('Health check redirected outside the configured origin')
+            raise HTTPCheckFailure('redirect outside the configured origin')
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def check_url(base, route, expected, token):
+class HTTPCheckFailure(RuntimeError):
+    """Only constructed with diagnostic text safe to expose in Actions logs."""
+
+
+def is_raster_response(content_type, body):
+    """Check MIME, format signature and closing structure, not pixel identity.
+
+    Hostinger can resize/recompress images or convert them to WebP. Exact origin
+    bytes are verified by hostinger_remote.py; HTTP checks assess availability.
+    These lightweight checks are not a full image decoder.
+    """
+    if content_type == 'image/jpeg':
+        return len(body) > 32 and body.startswith(b'\xff\xd8\xff') and body.endswith(b'\xff\xd9')
+    if content_type == 'image/png':
+        return (len(body) >= 45 and body.startswith(b'\x89PNG\r\n\x1a\n')
+                and body[12:16] == b'IHDR'
+                and int.from_bytes(body[16:20], 'big') > 0
+                and int.from_bytes(body[20:24], 'big') > 0
+                and body.endswith(b'\x00\x00\x00\x00IEND\xaeB`\x82'))
+    if content_type == 'image/webp':
+        return (len(body) > 20 and body[:4] == b'RIFF' and body[8:12] == b'WEBP'
+                and body[12:16] in (b'VP8 ', b'VP8L', b'VP8X')
+                and int.from_bytes(body[4:8], 'little') + 8 == len(body))
+    if content_type == 'image/gif':
+        return (len(body) > 13 and body[:6] in (b'GIF87a', b'GIF89a')
+                and int.from_bytes(body[6:8], 'little') > 0
+                and int.from_bytes(body[8:10], 'little') > 0 and body[-1:] == b';')
+    return False
+
+
+def check_url(base, route, expected, token, *, allow_image_optimization=False):
     url = base.rstrip('/') + '/' + route + '?deployment_check=' + token
     request = Request(url, headers={'Cache-Control': 'no-cache', 'Accept-Encoding': 'identity',
                                     'User-Agent': 'Hostinger-Deployment-Check/1.0'})
     try:
         with build_opener(LimitedRedirects()).open(request, timeout=20) as response:
             if response.status != 200:
-                raise ValueError('Unexpected HTTP status')
+                raise HTTPCheckFailure(f'HTTP {response.status}; expected 200')
             h = hashlib.sha256()
+            body = bytearray()
+            received = 0
             deadline = time.monotonic() + 120
             for block in iter(lambda: response.read(1024 * 1024), b''):
                 if time.monotonic() > deadline:
                     raise TimeoutError('Health check exceeded time limit')
                 h.update(block)
+                received += len(block)
+                if allow_image_optimization:
+                    if received > 25 * 1024 * 1024:
+                        raise HTTPCheckFailure('image response exceeds 25 MiB verification limit')
+                    body.extend(block)
             if h.hexdigest() != expected:
-                raise ValueError('HTTP content differs from the validated release')
+                content_type = response.headers.get_content_type()
+                if allow_image_optimization and is_raster_response(content_type, body):
+                    print(f'Image variant available: {route} ({content_type}, {received} bytes).', flush=True)
+                    return
+                if allow_image_optimization:
+                    raise HTTPCheckFailure(f'HTTP 200 but invalid/unsupported raster image ({received} bytes); check CDN or routing')
+                raise HTTPCheckFailure(f'HTTP 200 but SHA-256 mismatch ({received} bytes); check caching or response rewriting')
+    except HTTPCheckFailure as error:
+        raise RuntimeError(f'HTTP verification failed for {route or "/"}: {error}') from None
+    except HTTPError as error:
+        detail = 'redirect loop or redirect limit reached' if 300 <= error.code < 400 else f'HTTP {error.code}'
+        raise RuntimeError(f'HTTP verification failed for {route or "/"}: {detail}') from None
+    except (TimeoutError, URLError) as error:
+        reason = error.reason if isinstance(error, URLError) else error
+        if isinstance(reason, TimeoutError):
+            detail = 'request timed out'
+        elif isinstance(reason, ssl.SSLError):
+            detail = 'TLS verification/connection failed'
+        else:
+            detail = 'DNS or network connection failed'
+        raise RuntimeError(f'HTTP verification failed for {route or "/"}: {detail}') from None
     except Exception as error:
-        raise RuntimeError('HTTP verification failed for ' + (route or '/') + ' (HTTP error, redirect, timeout, or content mismatch)') from error
+        raise RuntimeError(f'HTTP verification failed for {route or "/"}: response could not be read ({type(error).__name__})') from None
 
 
 def health(public, base):
@@ -203,7 +262,8 @@ def health(public, base):
     # Check every public asset, including video, and each existing directory route.
     for name, expected in {**manifest['files'], 'deployment.json': digest(public / 'deployment.json')}.items():
         route = name[:-10] if name.endswith('index.html') else name
-        check_url(base, route, expected, token)
+        check_url(base, route, expected, token,
+                  allow_image_optimization=Path(name).suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp', '.gif'})
     print(f'HTTP checks passed for {len(manifest["files"]) + 1} routes and assets, including the commit record.')
 
 
@@ -257,12 +317,12 @@ class Remote:
         if rsync and shutil.which('rsync'):
             command(['rsync', '--protect-args', '--checksum', '--times', '--chmod=F600',
                      '-e', shlex.join(self.ssh), '--', str(archive), self.target + ':' + destination], timeout=900)
-            print('Archive transferred with rsync over strict SSH.')
+            print('Archive transferred with rsync over strict SSH.', flush=True)
         else:
             # Modern OpenSSH scp uses SFTP; no remote shell path interpolation.
             command(['scp', *self.options, '-P', self.values['HOSTINGER_SSH_PORT'],
                      str(archive), self.target + ':' + destination], timeout=900)
-            print('rsync unavailable; archive transferred with OpenSSH SFTP/scp.')
+            print('rsync unavailable; archive transferred with OpenSSH SFTP/scp.', flush=True)
 
 
 def deploy(output, recover=None):
@@ -287,9 +347,10 @@ def deploy(output, recover=None):
             began = True
             check_url(values['SITE_URL'], 'hostinger-probe-' + release + '.txt',
                       hashlib.sha256(release.encode()).hexdigest(), release)
-            print('Destination confirmed through SITE_URL.')
+            print('Destination confirmed through SITE_URL.', flush=True)
             remote.upload(archive, details['archive'], details['rsync'])
             remote.call('activate', archive_sha256=digest(archive))
+            print('All installed files match the validated commit; checking public HTTP responses.', flush=True)
             health(public, values['SITE_URL'])
             remote.call('finish')
         except BaseException:

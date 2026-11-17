@@ -16,6 +16,7 @@ import tempfile
 import threading
 import unittest
 from unittest.mock import patch
+from urllib.error import URLError
 import uuid
 
 import deploy_hostinger as driver
@@ -46,6 +47,18 @@ def serve(directory, behavior='normal'):
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write(b'Wrong website')
+            elif behavior in ('optimized', 'truncated', 'fake-image'):
+                # Add a JPEG COM segment: different bytes, still a valid image.
+                original = (Path(directory) / 'assets/images/IMG-20250731-WA0027-scaled.jpg').read_bytes()
+                body = original[:2] + b'\xff\xfe\x00\x0cCDN sample' + original[2:]
+                if behavior == 'truncated':
+                    body = body[:128]
+                elif behavior == 'fake-image':
+                    body = b'<html>Access denied</html>'
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/jpeg')
+                self.end_headers()
+                self.wfile.write(body)
             else:
                 super().do_GET()
 
@@ -252,6 +265,46 @@ class DeploymentTests(unittest.TestCase):
             with self.subTest(behavior=behavior), serve(self.package / 'public', behavior) as base:
                 with self.assertRaisesRegex(RuntimeError, 'HTTP verification failed'):
                     driver.check_url(base, '', remote.digest(self.package / 'public/index.html'), uuid.uuid4().hex)
+
+    def test_optimized_image_accepted_but_strict_hash_still_fails(self):
+        route = 'assets/images/IMG-20250731-WA0027-scaled.jpg'
+        expected = remote.digest(self.package / 'public' / route)
+        with serve(self.package / 'public', 'optimized') as base:
+            driver.check_url(base, route, expected, uuid.uuid4().hex, allow_image_optimization=True)
+            with self.assertRaisesRegex(RuntimeError, 'SHA-256 mismatch'):
+                driver.check_url(base, route, expected, uuid.uuid4().hex)
+
+    def test_image_optimization_does_not_accept_errors_or_truncated_images(self):
+        for behavior in ('truncated', 'fake-image', 'fallback', 'error', 'loop', 'foreign'):
+            with self.subTest(behavior=behavior), serve(self.package / 'public', behavior) as base:
+                with self.assertRaisesRegex(RuntimeError, 'HTTP verification failed'):
+                    driver.check_url(base, 'assets/images/logo.png', '0' * 64, uuid.uuid4().hex,
+                                     allow_image_optimization=True)
+
+    def test_health_only_relaxes_raster_images(self):
+        with patch.object(driver, 'check_url') as check:
+            driver.health(self.package / 'public', 'https://site.invalid')
+        for call in check.call_args_list:
+            route = call.args[1]
+            self.assertEqual(call.kwargs['allow_image_optimization'],
+                             Path(route).suffix in {'.png', '.jpg', '.jpeg'})
+
+    def test_diagnostics_distinguish_status_redirect_and_content_errors(self):
+        for behavior, message in [('error', 'HTTP 503'), ('loop', 'redirect loop'),
+                                  ('foreign', 'outside the configured origin'), ('fallback', 'SHA-256 mismatch')]:
+            with self.subTest(behavior=behavior), serve(self.package / 'public', behavior) as base:
+                with self.assertRaisesRegex(RuntimeError, message) as raised:
+                    driver.check_url(base, '', '0' * 64, uuid.uuid4().hex)
+                self.assertNotIn(base, str(raised.exception))
+
+    def test_network_diagnostics_do_not_leak_url(self):
+        for reason, message in [(TimeoutError('secret-url'), 'timed out'),
+                                (OSError('secret-url'), 'DNS or network')]:
+            with patch.object(driver, 'build_opener') as opener:
+                opener.return_value.open.side_effect = URLError(reason)
+                with self.assertRaisesRegex(RuntimeError, message) as raised:
+                    driver.check_url('https://secret-url', 'index.html', '0' * 64, 'token')
+                self.assertNotIn('secret-url', str(raised.exception))
 
     def test_missing_secrets_report_names_only(self):
         with patch.dict(os.environ, {}, clear=True):

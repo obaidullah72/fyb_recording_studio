@@ -78,13 +78,26 @@ fail safely. The deployment preserves unrelated files such as `.htaccess`,
 from a later release are removed; there is **no rsync `--delete`**.
 
 Public verification GETs every packaged file, including the video and commit
-record, and checks its actual content hash. Directory indexes are checked at `/`,
+record. HTML, JavaScript, CSS, fonts, video, JSON, and other non-raster files must
+match their exact content hashes. Raster images (JPEG, PNG, WebP, GIF) may be
+resized/recompressed or converted by Hostinger CDN: when their HTTP hash differs,
+the response must be HTTP 200 with a supported image MIME type, matching format
+signature, and closing structure. This is an availability check, not full image
+decoding or proof of pixel identity; a stale or substituted valid image can pass
+it. **Every installed origin file, including every image, still requires an exact
+SHA-256 match over SSH before HTTP checks.** Directory indexes are checked at `/`,
 `/home/`, `/hello-world/`, and `/category/uncategorized/`; `/404.html` is also checked.
 HTTP errors, redirect loops (maximum five redirects), foreign-origin redirects,
-TLS failures, timeouts, and wrong content all fail deployment. Cache-busting and
-no-cache headers are used. Disable response rewriting/minification for these
-files, and ensure any CDN respects query-string cache busting; otherwise exact
-content verification deliberately fails.
+TLS failures, timeouts, invalid image responses, and non-image content mismatches
+all fail deployment. Errors report the HTTP status or failure category without
+printing secret URLs or response bodies. Cache-busting and no-cache headers are
+used. Disable response rewriting/minification for non-image files, and ensure
+any CDN respects query-string cache busting; otherwise exact verification fails.
+
+Hostinger [automatically optimizes temporary-domain images](https://www.hostinger.com/support/7935917-hostinger-cdn-website-optimization/).
+For example, a repository JPEG of 2560×1706 pixels can be served as 1600×1066
+with a different hash despite a correct deployment. The raster-image checks
+above accommodate this without requiring additional secrets or CDN settings.
 
 Existing routing rules remain untouched. The host must serve these real static
 files and directory indexes. A WordPress rewrite, preferred `index.php`, or login
