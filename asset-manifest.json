@@ -1,0 +1,194 @@
+[
+  {
+    "source": "wp-content/uploads/2025/07/Screenshot-2025-07-30-111101.png",
+    "file": "assets/images/logo.png",
+    "bytes": 4857,
+    "sha256": "5bba9f296999e40a521c3c94a69c64c8b3725b83b958b21d07049caf757457dc"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG_7320-scaled.png",
+    "file": "assets/images/footer-logo.png",
+    "bytes": 22802,
+    "sha256": "314a3a9db0bcee68eba92f9bab932e885d04935a207f18040aed4fceff3a01ba"
+  },
+  {
+    "source": "wp-content/uploads/2025/08/WhatsApp-Image-2025-08-15-at-12.09.14-AM.jpeg",
+    "file": "assets/images/studio-awards.jpeg",
+    "bytes": 124294,
+    "sha256": "85aae9155d3855b7d2ffede68517011068e019e11f0a2b141a5dc5ae28518ab6"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/JACQUEES-FYB-RECORDS.mp4",
+    "file": "assets/video/jacquees-fyb-records.mp4",
+    "bytes": 49969809,
+    "sha256": "2f1c403a1427d1b306612b781850c8f51e21aa293d8cbf1d5f02856dfff9008f"
+  },
+  {
+    "source": "wp-content/uploads/2025/08/cropped-Screenshot-2025-08-26-005240-32x32.png",
+    "file": "assets/images/favicon.png",
+    "bytes": 584,
+    "sha256": "a45acf5ea9efab2bd2befd449073bc444ed86772b83b6bdcbd8a60fd286bd87a"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/inter-ucc53fwrk3iltcvneqg7ca725jhhknnqk6l5uum.woff2",
+    "file": "assets/fonts/inter-ucc53fwrk3iltcvneqg7ca725jhhknnqk6l5uum.woff2",
+    "bytes": 51832,
+    "sha256": "7291b5970da2237441273c03b424a504b70b18f09791473fab99687dcc314720"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/inter-ucc73fwrk3iltehus_nvmrmxcp50sjia1zl7.woff2",
+    "file": "assets/fonts/inter-ucc73fwrk3iltehus_nvmrmxcp50sjia1zl7.woff2",
+    "bytes": 48256,
+    "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/syne-8vih7w4qzmvxm2bl9a.woff2",
+    "file": "assets/fonts/syne-8vih7w4qzmvxm2bl9a.woff2",
+    "bytes": 34608,
+    "sha256": "68b623f0e45b905041b2edb9b2e4f563a505f13db1cd06b5f1946eb2e1f47048"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlm21lvf9eo.woff2",
+    "file": "assets/fonts/poppins-pxidyp8kv8jhgfvrjjlm21lvf9eo.woff2",
+    "bytes": 8712,
+    "sha256": "f0ae296f5c19db047491f1311d621ff18960b34cfa9cb07b69932a02ec298366"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxigyp8kv8jhgfvrjjluchta.woff2",
+    "file": "assets/fonts/poppins-pxigyp8kv8jhgfvrjjluchta.woff2",
+    "bytes": 8668,
+    "sha256": "50d0c1742d80ac71f4cde20e8c04d41a24806af342831f479938b527fbff0972"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlmg1hvf9eo.woff2",
+    "file": "assets/fonts/poppins-pxidyp8kv8jhgfvrjjlmg1hvf9eo.woff2",
+    "bytes": 8504,
+    "sha256": "1ddb074f9963be8f6275c42dbd54d18625da8f91c85803121094ec81649f488b"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlmr19vf9eo.woff2",
+    "file": "assets/fonts/poppins-pxidyp8kv8jhgfvrjjlmr19vf9eo.woff2",
+    "bytes": 8724,
+    "sha256": "3ad6c8bd3624555dd79177efe91f0aca20e7f28597fa6b49762c27f337500d8d"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlmy15vf9eo.woff2",
+    "file": "assets/fonts/poppins-pxidyp8kv8jhgfvrjjlmy15vf9eo.woff2",
+    "bytes": 8596,
+    "sha256": "4b0864712c6e7ca75f8c003f7bc1a9270af33d6becd4119463771593274c48d2"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrldz8z1xlfq.woff2",
+    "file": "assets/fonts/poppins-pxibyp8kv8jhgfvrldz8z1xlfq.woff2",
+    "bytes": 7840,
+    "sha256": "78bc3aa78faec288bbb3bf26c9a0fa4eb67b1e69da94a17233c5cab60525efdb"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxieyp8kv8jhgfvrjjfecg.woff2",
+    "file": "assets/fonts/poppins-pxieyp8kv8jhgfvrjjfecg.woff2",
+    "bytes": 7884,
+    "sha256": "7d93459d86585bfcdbb7e0376056226adb25821ee54b96236fe2123e9560929f"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrlgt9z1xlfq.woff2",
+    "file": "assets/fonts/poppins-pxibyp8kv8jhgfvrlgt9z1xlfq.woff2",
+    "bytes": 7748,
+    "sha256": "cd36de204aca2d5fa263a731f7c20009b5e3d754ba1f1e03c33e93a48f3e7446"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrlej6z1xlfq.woff2",
+    "file": "assets/fonts/poppins-pxibyp8kv8jhgfvrlej6z1xlfq.woff2",
+    "bytes": 8000,
+    "sha256": "f4e80d9dfd374d02989b87a27b5ed4cb78fbb177c27f1478e9a8b0afb7513149"
+  },
+  {
+    "source": "wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrlcz7z1xlfq.woff2",
+    "file": "assets/fonts/poppins-pxibyp8kv8jhgfvrlcz7z1xlfq.woff2",
+    "bytes": 7816,
+    "sha256": "9338e65fc077355c7a87ae0d64cc101e23b9bf8ad78ae65f0f319c857311b526"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0030-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0030-scaled.jpg",
+    "bytes": 423774,
+    "sha256": "0876ba7e6440bff09a51ef2a9e9fc52ca2c95ef24b2898c26abcb87a1d25b937"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0031-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0031-scaled.jpg",
+    "bytes": 499779,
+    "sha256": "5f79907fc243f83718f74fc4c7cfdbc2fe0a7baeb52f58b52232bb30b3210080"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0027-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0027-scaled.jpg",
+    "bytes": 375455,
+    "sha256": "157242e35763254d96785fe64a1fbd3109b3b9abb155e67cf4345eede6bde4ae"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0036-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0036-scaled.jpg",
+    "bytes": 400292,
+    "sha256": "22a9153391bc77fe17dac517be01e2a6558cc5fe4ab418ee155e7ed4cda9f91c"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0037-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0037-scaled.jpg",
+    "bytes": 389736,
+    "sha256": "a9da7864eb9510f00901513b366784aac555f73785664ebbf86bf0f2eddfe0f9"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0035-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0035-scaled.jpg",
+    "bytes": 363824,
+    "sha256": "e8c449334380dffd52e8a6a6869a398b5dc9ecd32c951fcbfd7b43c0d4436385"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/WhatsApp-Image-2025-07-31-at-23.56.29_a4462e31.jpg",
+    "file": "assets/images/WhatsApp-Image-2025-07-31-at-23.56.29_a4462e31.jpg",
+    "bytes": 143058,
+    "sha256": "088b7963810e44c5b571e7c43d5a0bfe022d98767603e60dc3a08ec69fda688f"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/WhatsApp-Image-2025-07-31-at-23.56.43_a93fef79-scaled.jpg",
+    "file": "assets/images/WhatsApp-Image-2025-07-31-at-23.56.43_a93fef79-scaled.jpg",
+    "bytes": 348065,
+    "sha256": "544c38abc904a1de82e560277ca74cace58d6d6a50e2a896c45213aea001d4af"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0042-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0042-scaled.jpg",
+    "bytes": 318559,
+    "sha256": "4f24aff53a88068d13fb30d2e29e7b1d3226f576626663ebf229bf9703110e0e"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0043-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0043-scaled.jpg",
+    "bytes": 331959,
+    "sha256": "ad573b2bab15297f683ebd187fe4f897d31dd06edf34abc6dd41fd91c767346e"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/WhatsApp-Image-2025-07-31-at-23.57.13_2fc9d5a6-scaled.jpg",
+    "file": "assets/images/WhatsApp-Image-2025-07-31-at-23.57.13_2fc9d5a6-scaled.jpg",
+    "bytes": 348500,
+    "sha256": "477ecce689ad52fce8b1eb8d1fa67cb698cd8e544930aa9971a4f5430844d455"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0045-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0045-scaled.jpg",
+    "bytes": 544985,
+    "sha256": "3b62687a416b49abc9f8456a213515297953311cc8e44e121a52bb384dd008dc"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0046-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0046-scaled.jpg",
+    "bytes": 606554,
+    "sha256": "6b2fded0d14bfa63655aba891c3fae2e7ac67534fe446ef61a089427267fe76e"
+  },
+  {
+    "source": "wp-content/uploads/2025/07/IMG-20250731-WA0047-scaled.jpg",
+    "file": "assets/images/IMG-20250731-WA0047-scaled.jpg",
+    "bytes": 546968,
+    "sha256": "1b5265673049cf36a304fc798a7078d886f8d22078970257eebc84676de68a97"
+  }
+]

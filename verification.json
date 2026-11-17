@@ -1,0 +1,80 @@
+{
+  "pages": [
+    {
+      "route": "/",
+      "status": 200,
+      "title": "FYB Recording Studio | Recording, Music & Creative Space"
+    },
+    {
+      "route": "/home/",
+      "status": 200,
+      "title": "FYB Recording Studio | Home"
+    },
+    {
+      "route": "/hello-world/",
+      "status": 200,
+      "title": "Hello world! | FYB Recording Studio"
+    },
+    {
+      "route": "/category/uncategorized/",
+      "status": 200,
+      "title": "Uncategorized | FYB Recording Studio"
+    },
+    {
+      "route": "/404.html",
+      "status": 200,
+      "title": "Page not found | FYB Recording Studio"
+    }
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "scroll": 320,
+      "images": 18
+    },
+    {
+      "width": 375,
+      "scroll": 375,
+      "images": 18
+    },
+    {
+      "width": 440,
+      "scroll": 440,
+      "images": 18
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "images": 18
+    },
+    {
+      "width": 1024,
+      "scroll": 1024,
+      "images": 18
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "images": 18
+    },
+    {
+      "width": 1920,
+      "scroll": 1920,
+      "images": 18
+    }
+  ],
+  "checks": [
+    "Mobile menu opens, Escape closes it and restores focus; backdrop closes it.",
+    "All five galleries: next/previous, wraparound, keyboard, swipe, play/pause; reduced-motion defaults to paused.",
+    "Get Quote reaches studio rates and real email/phone contact links.",
+    "Local MP4 plays: 1080×1920, 222.0 seconds.",
+    "32 source assets verified by file size and served successfully.",
+    "Content, first gallery images, native video controls, rates and contact links are present without JavaScript.",
+    "SHA-256 checksums match all 32 original assets and their uploads ZIP backup copies.",
+    "Confirmed automatic gallery rotation in normal-motion mode; site also loads directly from local index.html."
+  ],
+  "errors": [],
+  "result": "PASS",
+  "date": "2026-11-17",
+  "browser": "Google Chrome (headless, local macOS)"
+}
