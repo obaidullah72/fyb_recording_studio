@@ -1,5 +1,8 @@
 # FYB Recording Studio — standalone frontend
 
+For GitHub Actions deployment to Hostinger, first-run setup, verification, and
+rollback instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 This folder is the deployable website. It uses HTML, CSS, and vanilla JavaScript, with local images, fonts, and the original MP4. It does not load WordPress, PHP, Elementor, jQuery, a database, or remote font services. The WordPress installation and backups outside this folder were left unchanged.
 
 ## Run locally

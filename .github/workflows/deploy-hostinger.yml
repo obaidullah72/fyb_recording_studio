@@ -1,0 +1,43 @@
+name: Deploy static site to Hostinger
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One production destination, including manual runs. Never interrupt a transfer.
+concurrency:
+  group: hostinger-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out the exact triggering commit
+        # actions/checkout v4.3.1; reviewed action metadata and release diff.
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Validate and package the static site
+        env:
+          DEPLOY_COMMIT: ${{ github.sha }}
+        run: python3 scripts/deploy_hostinger.py package --source . --output "$RUNNER_TEMP/hostinger-package"
+
+      - name: Upload, deploy, and verify (restore previous files on failure)
+        env:
+          HOSTINGER_DEPLOY_PATH: ${{ secrets.HOSTINGER_DEPLOY_PATH }}
+          HOSTINGER_KNOWN_HOSTS: ${{ secrets.HOSTINGER_KNOWN_HOSTS }}
+          HOSTINGER_SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          HOSTINGER_SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT }}
+          HOSTINGER_SSH_PRIVATE_KEY: ${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}
+          HOSTINGER_SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          SITE_URL: ${{ secrets.SITE_URL }}
+        run: python3 scripts/deploy_hostinger.py deploy --output "$RUNNER_TEMP/hostinger-package"
